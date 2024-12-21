@@ -4,7 +4,7 @@ import ast
 from rich.console import Console
 from rich.text import Text
 import difflib
-import function_extractor
+from .function_extractor import parse_all_functions
 
 
 def extract_text_with_pymupdf(file_path):
@@ -67,7 +67,7 @@ def parse_user_code(file_path):
        classes = [node.name for node in ast.walk(tree) if isinstance(node, ast.ClassDef)]
        return {"functions": functions, "classes": classes}
        '''
-    func_calls = function_extractor.parse_all_functions(file_path)
+    func_calls = parse_all_functions(file_path)
     return func_calls
 
 
@@ -159,19 +159,3 @@ def get_unmatched_code(snippets, user_code_file_path):
     unmatched = compare_snippets(snippets, user_code)
     return unmatched
 
-pdf_file_path = "/Users/admin/PycharmProjects/CodeComparison/backend/uploads/Lists Iterables.pdf"  # PDF file path
-user_code_file_path = "/Users/admin/PycharmProjects/CodeComparison/backend/uploads/lab11_arun_amrita.py"    # Replace with actual user code file path
-
-# Step 1: Extract snippets from PDF
-lines = extract_text_with_pymupdf(pdf_file_path)
-extracted_snippets = extract_code_snippets(lines)
-
-# Step 2: Parse user code
-user_code = parse_user_code(user_code_file_path)
-
-# Step 3: Compare snippets
-unmatched = compare_snippets(extracted_snippets, user_code)
-
-# Step 4: Highlight unmatched code
-highlight_unmatched_code(unmatched)
-generate_diff_report(extracted_snippets, user_code)
