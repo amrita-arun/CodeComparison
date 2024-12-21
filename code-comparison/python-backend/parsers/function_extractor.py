@@ -25,3 +25,8 @@ def parse_all_functions(file_path):
     extractor.visit(tree)
 
     return extractor.function_calls
+
+def get_code(file_path):
+    with open(file_path, "r") as f:
+        code = f.read()
+    return code

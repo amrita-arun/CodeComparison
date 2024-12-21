@@ -1,6 +1,7 @@
 "use client"
 import Image from "next/image";
 import UploadForm from "./components/UploadForm.jsx";
+import ComparisonView from "./components/ComparisonView.jsx";
 import {useState} from "react";
 
 export default function Home() {
@@ -14,7 +15,11 @@ export default function Home() {
       ) : (
         <div>
           <h2>Comparison Data:</h2>
-          <pre>{JSON.stringify(comparisonData, null, 2)}</pre>
+          <pre>{JSON.stringify(comparisonData.userCode, null, 2)}</pre>
+
+          <ComparisonView userCode={comparisonData.userCode} unmatched={comparisonData.unmatchedCode.functions}/>
+          
+         { /*<pre>{JSON.stringify(comparisonData, null, 2)}</pre> */}
         </div>
       )}
     </div>

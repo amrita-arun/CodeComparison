@@ -4,7 +4,7 @@ import ast
 from rich.console import Console
 from rich.text import Text
 import difflib
-from .function_extractor import parse_all_functions
+from .function_extractor import parse_all_functions, get_code
 
 
 def extract_text_with_pymupdf(file_path):
@@ -14,7 +14,7 @@ def extract_text_with_pymupdf(file_path):
         text += page.get_text("text")
        # print(f"Page {page_num + 1} content:\n{page_text}\n{'-' * 40}")
         #text += page.get_text("text")  # Extracts text from the page
-    print("TEXT" + text)
+    #print("TEXT" + text)
     lines = text.split("\n")
     doc.close()
     return lines
@@ -57,20 +57,12 @@ def extract_code_snippets(lines):
     return code_snippets
 
 def parse_user_code(file_path):
-    '''
-       with open(file_path, "r") as f:
-           code = f.read()
-
-       tree = ast.parse(code)
-
-       functions = [node.name for node in ast.walk(tree) if isinstance(node, ast.FunctionDef)]
-       classes = [node.name for node in ast.walk(tree) if isinstance(node, ast.ClassDef)]
-       return {"functions": functions, "classes": classes}
-       '''
     func_calls = parse_all_functions(file_path)
     return func_calls
 
-
+def get_user_code(file_path):
+    code = get_code(file_path)
+    return code
 
 def compare_snippets(snippets, user_code):
     '''
@@ -81,16 +73,19 @@ def compare_snippets(snippets, user_code):
         cls for cls in user_code["classes"] if cls not in snippets
     ]
     '''
-    print("snippets: " + str(snippets))
+    #print("snippets: " + str(snippets))
     foundSnippet = False
     unmatched_functions = []
     for func in user_code:
-        for snippetArray in snippets:
-            for snippet in snippetArray:
-                if func in snippet:
-                    foundSnippet = True
+        if not foundSnippet:
+            for snippetArray in snippets:
+                if not foundSnippet:
+                    for snippet in snippetArray:
+                        if func in snippet:
+                            foundSnippet = True
         if not foundSnippet:
             unmatched_functions.append(func)
+        foundSnippet = False
 
     '''
     unmatched_functions = [
@@ -99,11 +94,12 @@ def compare_snippets(snippets, user_code):
     '''
     #return {"functions": unmatched_functions, "classes": unmatched_classes}
     return {"functions": unmatched_functions}
-
+'''
 def highlight_unmatched_code(unmatched):
     print("\nUnmatched Functions: ")
     for func in unmatched["functions"]:
         print(f"- {func}")
+'''
 
 
 '''
@@ -112,10 +108,11 @@ def highlight_unmatched_code(unmatched):
         print(f"-{cls}")
         '''
 
+'''
 def highlight_diffs_in_terminal(unmatched):
     console = Console()
 
-    console.print("\n[bold red] Unmatched Functions:[\nbold red[")
+    #console.print("\n[bold red] Unmatched Functions:[\nbold red[")
     for func in unmatched["functions"]:
         text=Text(func, style="bold yellow")
         #console.print(text)
@@ -148,11 +145,13 @@ def generate_diff_report(extracted_snippets, user_code, output_file="diff_report
         todesc="User Code"
     )
 
+
     # Save the diff to an HTML file
     with open(output_file, "w") as f:
         f.write(diff)
 
     print(f"HTML diff report saved to {output_file}")
+    '''
 
 def get_unmatched_code(snippets, user_code_file_path):
     user_code = parse_user_code(user_code_file_path)
