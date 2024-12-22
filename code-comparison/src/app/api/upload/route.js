@@ -25,7 +25,7 @@ export async function POST(req) {
   // Convert the Web Streams API request to a Node.js-style request
   const nodeReq = toNodeRequest(req);
 
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     const form = new IncomingForm();
 
     form.parse(nodeReq, async (err, fields, files) => {
