@@ -8,20 +8,22 @@ export default function Home() {
   const [comparisonData, setComparisonData] = useState(null);
 
   return (
-    <div>
-      <h1>Code Comparison Tool</h1>
-      {!comparisonData ? (
-        <UploadForm setComparisonData={setComparisonData} />
-      ) : (
-        <div>
-          <h2>Comparison Data:</h2>
-          <pre>{JSON.stringify(comparisonData.userCode, null, 2)}</pre>
-
-          <ComparisonView userCode={comparisonData.userCode} unmatched={comparisonData.unmatchedCode.functions}/>
-          
-         { /*<pre>{JSON.stringify(comparisonData, null, 2)}</pre> */}
-        </div>
-      )}
+    <div className="min-h-screen bg-gray-100	flex flex-col">
+      <div className="container mx-auto bg-gray-100 pt-5 text-center">
+        <div className="pt-9 text-zinc-800 text-[50px] font-black font-['Montserrat']">Check for code you’re not supposed to use</div>
+        
+        {!comparisonData ? (
+          <UploadForm className="container mx-auto px-8" setComparisonData={setComparisonData} />
+        ) : (
+          <div className="container mx-auto">
+            <UploadForm setComparisonData={setComparisonData} />
+            <ComparisonView userCode={comparisonData.userCode} unmatched={comparisonData.unmatchedCode.functions}/>
+            
+            {/*<pre>{JSON.stringify(comparisonData, null, 2)}</pre> */}
+          </div>
+        )}
+      </div >
+      <div className="mt-auto"></div>
     </div>
-  )
+  );
 }
