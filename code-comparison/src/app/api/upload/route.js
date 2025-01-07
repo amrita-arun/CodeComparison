@@ -49,7 +49,7 @@ export async function POST(req) {
 
         // Send the files to FastAPI
         const backendResponse = await axios.post(
-          "http://0.0.0.0:8080",
+          "successful-comfort-production.up.railway.app",
           //"http://127.0.0.1:8000/parse-files",
           formData,
           {
