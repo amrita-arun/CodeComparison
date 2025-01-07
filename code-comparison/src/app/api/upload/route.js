@@ -49,7 +49,8 @@ export async function POST(req) {
 
         // Send the files to FastAPI
         const backendResponse = await axios.post(
-          "http://127.0.0.1:8000/parse-files",
+          "http://0.0.0.0:8080",
+          //"http://127.0.0.1:8000/parse-files",
           formData,
           {
             headers: formData.getHeaders(),
